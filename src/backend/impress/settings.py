@@ -925,6 +925,23 @@ class Development(Base):
     def __init__(self):
         # pylint: disable=invalid-name
         self.INSTALLED_APPS += ["django_extensions", "drf_spectacular_sidecar"]
+        # In development we run over HTTP (not HTTPS) so cookies should not
+        # require the Secure flag. This ensures session cookies are sent during
+        # the OIDC redirect callback when running locally.
+        self.SESSION_COOKIE_SECURE = False
+        self.CSRF_COOKIE_SECURE = False
+        # Keycloak runs on a different port which makes redirects cross-site from
+        # the browser perspective. Use SameSite=None so the session cookie is
+        # sent on the callback redirect during development. Keep Secure=False
+        # since we run over HTTP locally.
+        # Note: Some browsers require SameSite=None to be paired with Secure;
+        # this is acceptable in HTTPS environments; for local development we
+        # still set None to relax SameSite behavior.
+        # Use 'Lax' for local dev which permits top-level GET navigations
+        # (which OIDC uses for the authorization code redirect) while avoiding
+        # requiring Secure=True (which browsers enforce for SameSite=None).
+        self.SESSION_COOKIE_SAMESITE = "Lax"
+        self.CSRF_COOKIE_SAMESITE = "Lax"
 
 
 class Test(Base):

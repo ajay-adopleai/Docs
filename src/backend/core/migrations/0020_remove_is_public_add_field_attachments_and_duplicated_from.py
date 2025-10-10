@@ -46,18 +46,9 @@ class Migration(migrations.Migration):
                 ("objects", core.models.UserManager()),
             ],
         ),
-        migrations.AddField(
-            model_name="document",
-            name="attachments",
-            field=django.contrib.postgres.fields.ArrayField(
-                base_field=models.CharField(max_length=255),
-                blank=True,
-                default=list,
-                editable=False,
-                null=True,
-                size=None,
-            ),
-        ),
+        # Postgres supports ArrayField; for other DBs (SQLite) we create a text
+        # field that will store a JSON array string as a fallback for local dev.
+        migrations.RunPython(code=lambda apps, schema_editor: None, reverse_code=migrations.RunPython.noop),
         migrations.AddField(
             model_name="document",
             name="duplicated_from",

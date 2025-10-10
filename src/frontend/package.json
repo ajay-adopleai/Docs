@@ -43,5 +43,8 @@
     "wrap-ansi": "9.0.2",
     "yjs": "13.6.27"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@1.22.22",
+  "dependencies": {
+    "yarn": "^1.22.22"
+  }
 }

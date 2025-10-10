@@ -2,6 +2,7 @@
 
 from django.db import migrations
 
+
 procedure = """
 DO $$
 DECLARE
@@ -118,11 +119,19 @@ END $$;
 """
 
 
+def run_procedure_if_postgres(apps, schema_editor):
+    if schema_editor.connection.vendor == "postgresql":
+        # psycopg parses % characters as placeholders; the DO block uses '%' in RAISE NOTICE
+        # so escape single percent signs to '%%' before executing to avoid ProgrammingError.
+        safe_sql = procedure.replace('%', '%%')
+        schema_editor.execute(safe_sql)
+
+
 class Migration(migrations.Migration):
     dependencies = [
         ("core", "0006_add_user_full_name_and_short_name"),
     ]
 
     operations = [
-        migrations.RunSQL(procedure),
+        migrations.RunPython(run_procedure_if_postgres, reverse_code=migrations.RunPython.noop),
     ]

@@ -23,7 +23,7 @@ description = "An application to print markdown to pdf from a set of managed tem
 keywords = ["Django", "Contacts", "Templates", "RBAC"]
 license = { file = "LICENSE" }
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<4.0"
 dependencies = [
     "beautifulsoup4==4.13.4",
     "boto3==1.39.4",

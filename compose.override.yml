@@ -1,0 +1,12 @@
+services:
+  frontend-development:
+    ports:
+      - "3000:3000"
+  minio:
+    volumes:
+      - docs_minio_data:/data
+
+volumes:
+  docs_minio_data:
+    name: docs_minio_data
+

@@ -46,6 +46,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="document",
             name="path",
-            field=models.CharField(db_collation="C", max_length=252, unique=True),
+            field=models.CharField(max_length=252, unique=True),
         ),
     ]

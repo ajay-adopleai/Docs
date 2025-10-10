@@ -3,14 +3,21 @@
 from django.db import migrations
 
 
+def create_fuzzystrmatch_if_postgres(apps, schema_editor):
+    if schema_editor.connection.vendor == "postgresql":
+        schema_editor.execute("CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;")
+
+
+def drop_fuzzystrmatch_if_postgres(apps, schema_editor):
+    if schema_editor.connection.vendor == "postgresql":
+        schema_editor.execute("DROP EXTENSION IF EXISTS fuzzystrmatch;")
+
+
 class Migration(migrations.Migration):
     dependencies = [
         ("core", "0012_make_document_creator_and_invitation_issuer_optional"),
     ]
 
     operations = [
-        migrations.RunSQL(
-            "CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;",
-            reverse_sql="DROP EXTENSION IF EXISTS fuzzystrmatch;",
-        ),
+        migrations.RunPython(create_fuzzystrmatch_if_postgres, reverse_code=drop_fuzzystrmatch_if_postgres),
     ]
