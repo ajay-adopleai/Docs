@@ -71,7 +71,7 @@ services:
       - env.d/development/postgresql
       - env.d/development/postgresql.local
     ports:
-      - "0.0.0.0:8071:8000"
+      - "8071:8000"
     volumes:
       - ./src/backend:/app
       - ./data/static:/data/static
@@ -106,7 +106,7 @@ services:
   nginx:
     image: nginx:1.25
     ports:
-      - "0.0.0.0:8083:8083"
+      - "8083:8083"
     volumes:
       - ./docker/files/etc/nginx/conf.d:/etc/nginx/conf.d:ro
     depends_on:
@@ -123,7 +123,7 @@ services:
       dockerfile: ./src/frontend/Dockerfile
       target: impress-dev
       args:
-        API_ORIGIN: "http://172.212.108.66:8071"
+        API_ORIGIN: "http://localhost:8071"
         PUBLISH_AS_MIT: "false"
         SW_DEACTIVATED: "true"
     image: impress:frontend-development
@@ -191,7 +191,7 @@ services:
       - start-dev
       - --features=preview
       - --import-realm
-      - --hostname=http://172.212.108.66:8083
+      - --hostname=http://localhost:8083
       - --hostname-strict=false
       - --health-enabled=true
       - --metrics-enabled=true

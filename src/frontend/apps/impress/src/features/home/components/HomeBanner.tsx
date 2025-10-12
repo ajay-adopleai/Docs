@@ -1,12 +1,13 @@
 import { Button } from '@openfun/cunningham-react';
 import Image from 'next/image';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from 'styled-components';
 
 import IconDocs from '@/assets/icons/icon-docs.svg';
 import { Box, Icon, Text } from '@/components';
 import { useCunninghamTheme } from '@/cunningham';
-import { ProConnectButton, gotoLogin } from '@/features/auth';
+import { ProConnectButton, gotoLogin, PATH_AUTH_LOCAL_STORAGE } from '@/features/auth';
 import { useResponsiveStore } from '@/stores';
 
 import banner from '../assets/banner.jpg';
@@ -79,7 +80,10 @@ export default function HomeBanner() {
             <ProConnectButton />
           ) : (
             <Button
-              onClick={() => gotoLogin()}
+              onClick={() => {
+                localStorage.setItem(PATH_AUTH_LOCAL_STORAGE, '/docs/new');
+                gotoLogin(false);
+              }}
               icon={<Icon iconName="bolt" $color="white" />}
             >
               {t('Start Writing')}
@@ -108,7 +112,7 @@ export default function HomeBanner() {
           icon={
             <Icon $theme="primary" $variation="800" iconName="expand_more" />
           }
-          onClick={(e) => {
+          onClick={(e: React.MouseEvent) => {
             e.preventDefault();
             document
               .querySelector('#docs-app-info')
